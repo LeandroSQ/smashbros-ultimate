@@ -1,0 +1,32 @@
+<resources xmlns:tools="http://schemas.android.com/tools">
+	<!-- Base application theme. -->
+	<style name="Theme.App" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+		<!-- Primary brand color. -->
+		<item name="colorPrimary">@color/blue</item>
+		<item name="colorPrimaryVariant">@color/dark_blue</item>
+		<item name="colorOnPrimary">@color/white</item>
+
+		<!-- Secondary brand color. -->
+		<item name="colorSecondary">@color/darker_blue</item>
+		<item name="colorSecondaryVariant">@color/darker_blue</item>
+		<item name="colorOnSecondary">@color/black</item>
+
+		<!-- Status and navigation bar color. -->
+		<item name="android:statusBarColor" tools:targetApi="l">@color/dark_blue</item>
+		<item name="android:navigationBarColor" tools:targetApi="l">@color/dark_blue</item>
+	</style>
+
+	<style name="Theme.App.OnBoarding">
+		<!-- Status and navigation bar color. -->
+		<item name="android:statusBarColor" tools:targetApi="l">@color/blue</item>
+		<item name="android:navigationBarColor" tools:targetApi="l">@color/blue</item>
+	</style>
+
+	<!-- Splash screen theme. -->
+	<style name="Theme.App.Splashscreen" parent="Theme.SplashScreen">
+		<item name="windowSplashScreenBackground">@color/darker_blue</item>
+		<item name="windowSplashScreenAnimatedIcon">@drawable/logo</item>
+		<item name="windowSplashScreenAnimationDuration">200</item>
+		<item name="postSplashScreenTheme">@style/Theme.App</item>
+	</style>
+</resources>

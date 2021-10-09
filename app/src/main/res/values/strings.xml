@@ -1,0 +1,16 @@
+<resources>
+
+	<string name="app_name">Smash Bros - Ultimate</string>
+
+	<!-- <editor-fold defaultstate="Collapsed" desc="Onboarding" -->
+	<string name="content_description_onboarding_continue_fab">Continue</string>
+
+	<!-- <editor-fold defaultstate="Collapsed" desc="Pages" -->
+	<string name="text_onboarding_page1">Access our\nExtended Catalog</string>
+	<string name="text_onboarding_page2">Filter Fighters</string>
+	<string name="text_onboarding_page3">And More…</string>
+	<!-- </editor-fold> -->
+
+	<!-- </editor-fold> -->
+
+</resources>
