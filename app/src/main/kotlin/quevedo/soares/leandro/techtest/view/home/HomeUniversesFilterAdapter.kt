@@ -63,7 +63,10 @@ class HomeUniversesFilterAdapter : RecyclerView.Adapter<HomeUniversesFilterAdapt
 	@SuppressLint("NotifyDataSetChanged")
 	fun setItems(items: List<Universe>) {
 		this.items = items
-		this.selectedItem = null
+
+		// Update the selected item
+		if (this.selectedItem != null) this.selectedItem = this.items.find { it.objectId == selectedItem?.objectId }
+
 		this.notifyDataSetChanged()
 	}
 
