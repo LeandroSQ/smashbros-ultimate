@@ -18,7 +18,7 @@ import quevedo.soares.leandro.techtest.domain.usecase.GetUniversesUseCase
 
 class HomeViewModel(private val getUniversesUseCase: GetUniversesUseCase, private val getFightersUseCase: GetFightersUseCase) : ViewModel() {
 
-	var filter: FighterFilter? = null
+	var filter: FighterFilter = FighterFilter()
 
 	private val _viewState = MutableStateFlow<ViewState?>(null)
 	val viewState get() = this._viewState as StateFlow<ViewState?>
@@ -35,9 +35,9 @@ class HomeViewModel(private val getUniversesUseCase: GetUniversesUseCase, privat
 		}
 	}
 
-	fun getFighters(fromUniverse: Universe? = null, allowCache: Boolean = true) {
+	fun getFighters(allowCache: Boolean = true) {
 		viewModelScope.launch(Dispatchers.IO) {
-			getFightersUseCase(fromUniverse, allowCache).onEach {
+			getFightersUseCase(filter.universeName, allowCache).onEach {
 				when (it) {
 					is RequestState.Loading -> _viewState.emit(ViewState.LoadingFighters)
 					is RequestState.Success -> {
@@ -52,19 +52,22 @@ class HomeViewModel(private val getUniversesUseCase: GetUniversesUseCase, privat
 	}
 
 	private fun filterFighters(list: List<Fighter>): List<Fighter> {
-		// If the filter is null, just return the raw list
-		if (this.filter == null) return list
+		var filteredList = list
 
-		// Filters only the given rating
-		return list.filter { it.rate == this.filter!!.rating }// Force wrapping in this case is allowed, because of the checking above!
-				.sortedBy {
-					when (filter!!.sortBy) {// Force wrapping in this case is allowed, because of the checking above!
-						SortByPropertyEnum.Name -> it.name
-						SortByPropertyEnum.Price -> it.price
-						SortByPropertyEnum.Rate -> it.rate.toString()
-						SortByPropertyEnum.Downloads -> it.downloads
-					}
-				}
+		// If rating was provided, filter by it
+		if (this.filter.rating != null) filteredList = filteredList.filter { it.rate == this.filter.rating }
+
+		// If a property was provided, sort by it
+		if (this.filter.sortBy != null) filteredList = filteredList.sortedBy {
+			when (filter.sortBy!!) {
+				SortByPropertyEnum.Name -> it.name
+				SortByPropertyEnum.Price -> it.price
+				SortByPropertyEnum.Rate -> it.rate.toString()
+				SortByPropertyEnum.Downloads -> it.downloads
+			}
+		}
+
+		return filteredList
 	}
 
 	sealed class ViewState {

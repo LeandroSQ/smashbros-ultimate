@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+	<declare-styleable name="RatingBar">
+		<attr name="android:min" format="integer" />
+		<attr name="android:max" format="integer" />
+		<attr name="android:value" format="integer" />
+		<attr name="starPaddingHorizontal" format="dimension" />
+		<attr name="starPaddingVertical" format="dimension" />
+		<attr name="colorActive" format="color|reference" />
+		<attr name="colorInactive" format="reference|color" />
+	</declare-styleable>
+
+</resources>

@@ -4,7 +4,7 @@
 	xmlns:tools="http://schemas.android.com/tools"
 	android:layout_width="match_parent"
 	android:layout_height="match_parent"
-	tools:context=".view.fighterdetail.FighterDetailFragment">
+	tools:context=".view.fighterfilter.FighterFilterFragment">
 
 	<com.google.android.material.appbar.AppBarLayout
 		android:id="@+id/appBarLayout"
@@ -18,8 +18,9 @@
 			android:id="@+id/toolbar"
 			android:layout_width="match_parent"
 			android:layout_height="wrap_content"
+			android:theme="@style/Theme.App.Toolbar"
 			android:background="?colorPrimary"
-			app:title="@string/app_name"
+			app:title="@string/fighter_detail_toolbar_title"
 			app:titleTextAppearance="@style/Theme.App"
 			app:titleTextColor="@color/white">
 

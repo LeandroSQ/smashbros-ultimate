@@ -1,5 +1,6 @@
 package quevedo.soares.leandro.techtest.view.home
 
+import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
@@ -31,6 +32,12 @@ class HomeFighterAdapter : ListAdapter<Fighter, HomeFighterAdapter.ViewHolder>(t
 	override fun onBindViewHolder(holder: ViewHolder, position: Int) {
 		val item = this.getItem(position)
 		holder.bind(item)
+	}
+
+	@SuppressLint("NotifyDataSetChanged")
+	fun setItems(list: List<Fighter>) {
+		this.submitList(list)
+		this.notifyDataSetChanged()
 	}
 
 	inner class ViewHolder(private val binding: ItemFighterBinding) : RecyclerView.ViewHolder(binding.root) {

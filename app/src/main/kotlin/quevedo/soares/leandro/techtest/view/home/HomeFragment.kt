@@ -12,7 +12,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.ui.setupWithNavController
 import androidx.recyclerview.widget.DividerItemDecoration
 import kotlinx.coroutines.flow.collect
-import org.koin.androidx.viewmodel.ext.android.viewModel
+import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 import quevedo.soares.leandro.techtest.R
 import quevedo.soares.leandro.techtest.databinding.FragmentHomeBinding
 import quevedo.soares.leandro.techtest.databinding.ItemFighterBinding
@@ -21,7 +21,7 @@ import quevedo.soares.leandro.techtest.domain.model.Universe
 
 class HomeFragment : Fragment() {
 
-	private val viewModel: HomeViewModel by viewModel()
+	private val viewModel: HomeViewModel by sharedViewModel()
 	private val navController by lazy { findNavController() }
 	private lateinit var binding: FragmentHomeBinding
 
@@ -43,20 +43,21 @@ class HomeFragment : Fragment() {
 		this.setupSwipeToRefreshLayout()
 
 		lifecycleScope.launchWhenCreated { setupObservers() }
-		lifecycleScope.launchWhenCreated { loadData(allowCache = true) }
+		lifecycleScope.launchWhenCreated {
+			viewModel.getFighters(allowCache = true)
+			viewModel.getUniverses(allowCache = true)
+		}
 
 		this.setupUniversesRecyclerView()
 		this.setupFightersRecyclerView()
 	}
 
-	private fun loadData(allowCache: Boolean) {
-		viewModel.getFighters(allowCache = allowCache)
-		viewModel.getUniverses(allowCache)
-	}
-
 	private fun setupToolbar() {
 		this.binding.toolbar.setupWithNavController(this.navController)
-
+		this.binding.toolbar.setOnMenuItemClickListener {
+			onFilterButtonClick()
+			true
+		}
 	}
 
 	private fun setupSwipeToRefreshLayout() {
@@ -64,7 +65,7 @@ class HomeFragment : Fragment() {
 			binding.swipeToRefreshLayout.isRefreshing = false
 
 			// Load data directly from the API, skipping cache
-			loadData(allowCache = false)
+			viewModel.getFighters(allowCache = false)
 		}
 	}
 
@@ -78,8 +79,15 @@ class HomeFragment : Fragment() {
 				}
 
 				is HomeViewModel.ViewState.FightersLoaded -> {
-					fightersAdapter.submitList(state.list)
-					fightersAdapter.notifyDataSetChanged()
+					// In case the list is empty
+					if (state.list.isEmpty()) {
+						binding.imageViewNoResults.visibility = View.VISIBLE// Show the no results image
+					} else {
+						binding.imageViewNoResults.visibility = View.GONE// Hide the no results image
+					}
+
+					// Update the recycler view
+					fightersAdapter.setItems(state.list)
 				}
 
 				is HomeViewModel.ViewState.FightersError -> {
@@ -135,12 +143,14 @@ class HomeFragment : Fragment() {
 		}
 	}
 
-	private fun onFilterButtonClick(button: View) {
-
+	private fun onFilterButtonClick() {
+		this.navController.navigate(HomeFragmentDirections.actionHomeFragmentToFighterFilterFragment())
 	}
 
 	private fun onUniverseSelected(item: Universe?) {
-		this.viewModel.getFighters(fromUniverse = item)
+		// Update the filter
+		this.viewModel.filter.universeName = item?.name
+		this.viewModel.getFighters()
 	}
 
 	private fun onFighterSelected(item: Fighter, binding: ItemFighterBinding) {

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
 	xmlns:app="http://schemas.android.com/apk/res-auto"
 	xmlns:tools="http://schemas.android.com/tools"
 	android:layout_width="match_parent"
@@ -9,55 +9,69 @@
 		android:id="@+id/appBarLayout"
 		android:layout_width="match_parent"
 		android:layout_height="wrap_content"
-		app:elevation="10dp"
+		android:background="@color/white"
 		app:layout_constraintEnd_toEndOf="parent"
 		app:layout_constraintStart_toStartOf="parent"
-		app:layout_constraintTop_toTopOf="parent">
+		app:layout_constraintTop_toTopOf="parent"
+		app:liftOnScroll="true">
 
 		<com.google.android.material.appbar.MaterialToolbar
 			android:id="@+id/toolbar"
 			android:layout_width="match_parent"
-			android:layout_height="wrap_content"
+			android:layout_height="?attr/actionBarSize"
 			android:background="?colorPrimary"
+			android:theme="@style/Theme.App.Toolbar"
 			app:menu="@menu/menu_home"
-			app:title="@string/app_name"
+			app:title="@string/home_toolbar_title"
 			app:titleTextAppearance="@style/Theme.App"
-			app:titleTextColor="@color/white">
+			app:titleTextColor="@color/white" />
 
-
-		</com.google.android.material.appbar.MaterialToolbar>
+		<androidx.recyclerview.widget.RecyclerView
+			android:id="@+id/recyclerViewUniversesFilter"
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:clipChildren="false"
+			android:clipToPadding="false"
+			android:orientation="horizontal"
+			android:paddingHorizontal="10dp"
+			app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+			app:layout_constraintEnd_toEndOf="parent"
+			app:layout_constraintStart_toStartOf="parent"
+			app:layout_constraintTop_toBottomOf="@id/appBarLayout"
+			tools:listitem="@layout/item_universe" />
 
 	</com.google.android.material.appbar.AppBarLayout>
-
-	<androidx.recyclerview.widget.RecyclerView
-		android:id="@+id/recyclerViewUniversesFilter"
-		android:layout_width="0dp"
-		android:layout_height="wrap_content"
-		android:layout_marginTop="10dp"
-		android:clipChildren="false"
-		android:clipToPadding="false"
-		android:orientation="horizontal"
-		android:paddingHorizontal="10dp"
-		app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-		app:layout_constraintEnd_toEndOf="parent"
-		app:layout_constraintStart_toStartOf="parent"
-		app:layout_constraintTop_toBottomOf="@id/appBarLayout"
-		tools:listitem="@layout/item_universe" />
 
 	<androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 		android:id="@+id/swipeToRefreshLayout"
 		android:layout_width="match_parent"
-		android:layout_height="0dp"
-		android:layout_marginTop="10dp"
+		android:layout_height="match_parent"
+		app:layout_behavior="@string/appbar_scrolling_view_behavior"
 		app:layout_constraintBottom_toBottomOf="parent"
 		app:layout_constraintTop_toBottomOf="@id/recyclerViewUniversesFilter">
 
-		<androidx.recyclerview.widget.RecyclerView
-			android:id="@+id/recyclerViewFighters"
+		<FrameLayout
 			android:layout_width="match_parent"
-			android:layout_height="match_parent"
-			app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-			tools:listitem="@layout/item_fighter" />
+			android:layout_height="match_parent">
+
+			<androidx.recyclerview.widget.RecyclerView
+				android:id="@+id/recyclerViewFighters"
+				android:layout_width="match_parent"
+				android:layout_height="match_parent"
+				app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+				tools:listitem="@layout/item_fighter" />
+
+			<ImageView
+				android:layout_width="match_parent"
+				tools:visibility="visible"
+				android:id="@+id/imageViewNoResults"
+				tools:alpha="0.5"
+				android:visibility="gone"
+				android:layout_height="match_parent"
+				android:layout_margin="100dp"
+				android:contentDescription="@string/content_description_no_results"
+				android:src="@drawable/ic_empty_list" />
+		</FrameLayout>
 
 	</androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
-</androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

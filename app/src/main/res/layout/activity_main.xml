@@ -10,7 +10,6 @@
 		android:id="@+id/fragmentContainerView"
 		android:layout_width="0dp"
 		android:name="androidx.navigation.fragment.NavHostFragment"
-		app:navGraph="@navigation/navigation_onboarding"
 		app:defaultNavHost="true"
 		android:layout_height="0dp"
 		app:layout_constraintBottom_toBottomOf="parent"

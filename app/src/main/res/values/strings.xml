@@ -14,8 +14,10 @@
 	<!-- </editor-fold> -->
 
 	<!-- <editor-fold defaultstate="Collapsed" desc="Home" -->
+	<string name="home_toolbar_title">Fighters</string>
 	<string name="home_menu_action_filter">Filter</string>
 	<string name="text_all">All</string>
+	<string name="content_description_no_results">No results</string>
 
 	<!-- <editor-fold defaultstate="Collapsed" desc="Fighter" -->
 	<string name="text_fighter_price">Price: $%1$s</string>
@@ -25,7 +27,16 @@
 	<!-- </editor-fold> -->
 
 	<!-- <editor-fold defaultstate="Collapsed" desc="Fighter detail" -->
+	<string name="fighter_detail_toolbar_title">Details</string>
 	<string name="content_description_fighter_detail_avatar">Fighter\'s avatar image</string>
+	<!-- </editor-fold> -->
+
+	<!-- <editor-fold defaultstate="Collapsed" desc="Fighter filter" -->
+	<string name="fighter_filter_toolbar_title">Filter</string>
+	<string name="fighter_filter_radiobutton_name">Name</string>
+	<string name="fighter_filter_radiobutton_price">Price</string>
+	<string name="fighter_filter_radiobutton_rate">Rate</string>
+	<string name="fighter_filter_radiobutton_downloads">Downloads</string>
 	<!-- </editor-fold> -->
 
 </resources>

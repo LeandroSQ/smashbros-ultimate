@@ -7,8 +7,8 @@
 		<item name="colorOnPrimary">@color/white</item>
 
 		<!-- Secondary brand color. -->
-		<item name="colorSecondary">@color/darker_blue</item>
-		<item name="colorSecondaryVariant">@color/darker_blue</item>
+		<item name="colorSecondary">@color/blue</item>
+		<item name="colorSecondaryVariant">@color/blue</item>
 		<item name="colorOnSecondary">@color/black</item>
 
 		<!-- Status and navigation bar color. -->
@@ -16,6 +16,22 @@
 		<item name="android:navigationBarColor" tools:targetApi="l">@color/dark_blue</item>
 
 		<item name="android:textColor">@color/dark_gray</item>
+	</style>
+
+	<style name="Theme.App.Toolbar" parent="ThemeOverlay.MaterialComponents.Toolbar.Primary">
+		<item name="colorOnPrimary">@color/white</item>
+	</style>
+
+	<style name="Theme.App.Button" parent="Widget.MaterialComponents.Button">
+		<item name="android:backgroundTint">@color/white</item>
+		<item name="android:textColor">@color/black</item>
+		<item name="android:paddingStart">20dp</item>
+		<item name="android:paddingEnd">20dp</item>
+		<item name="android:paddingTop">15dp</item>
+		<item name="android:paddingBottom">15dp</item>
+		<item name="textAllCaps">false</item>
+		<item name="android:shadowRadius" tools:targetApi="p">20</item>
+		<item name="android:outlineSpotShadowColor" tools:targetApi="p">@color/transparent_blue</item>
 	</style>
 
 	<style name="Theme.App.OnBoarding">
