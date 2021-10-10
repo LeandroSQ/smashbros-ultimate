@@ -13,4 +13,10 @@
 
 	<!-- </editor-fold> -->
 
+	<!-- <editor-fold defaultstate="Collapsed" desc="Fighter" -->
+	<string name="text_fighter_price">Price: $%1$s</string>
+	<string name="text_fighter_rate">Rate: %1$d</string>
+	<string name="text_fighter_downloads">Downloads: %1$s</string>
+	<!-- </editor-fold> -->
+
 </resources>

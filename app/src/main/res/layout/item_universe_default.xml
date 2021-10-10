@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TextView xmlns:android="http://schemas.android.com/apk/res/android"
+	android:layout_width="wrap_content"
+	android:id="@+id/textViewText"
+	android:background="@drawable/shape_universe_background"
+	android:layout_marginVertical="10dp"
+	android:layout_marginHorizontal="5dp"
+	android:paddingHorizontal="24dp"
+	android:paddingVertical="14dp"
+	android:elevation="5dp"
+	xmlns:tools="http://schemas.android.com/tools"
+	tools:text="@tools:sample/lorem"
+	android:textSize="14sp"
+	android:gravity="center"
+	android:layout_height="wrap_content" />
