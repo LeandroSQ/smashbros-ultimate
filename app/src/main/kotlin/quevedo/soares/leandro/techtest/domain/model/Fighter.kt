@@ -1,13 +1,16 @@
 package quevedo.soares.leandro.techtest.domain.model
 
+import android.os.Parcelable
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 import io.objectbox.annotation.Entity
 import io.objectbox.annotation.Id
+import kotlinx.android.parcel.Parcelize
 import java.util.*
 
 @JsonClass(generateAdapter = true)
 @Entity
+@Parcelize
 data class Fighter(
 	@Id var id: Long = 0L,// ObjectBox - id
 
@@ -21,7 +24,7 @@ data class Fighter(
 	@Json(name = "description") val description: String? = null,
 	@Json(name = "created_at") val created_at: Date? = null,
 	@Json(name = "imageURL") val avatar: String? = null,
-) {
+) : Parcelable {
 
 	fun isContentEqualTo(other: Fighter) = this.objectId == other.objectId &&
 			this.name == other.name &&

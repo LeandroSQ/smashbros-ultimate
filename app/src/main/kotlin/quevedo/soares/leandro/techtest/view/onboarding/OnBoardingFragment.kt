@@ -19,7 +19,7 @@ class OnBoardingFragment: Fragment() {
 	private val navController by lazy { findNavController() }
 	private val dataStore by lazy { DataStoreHelper(requireContext()) }
 
-	override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+	override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
 		this.binding = FragmentOnboardingBinding.inflate(inflater, container, false)
 		return this.binding.root
 	}

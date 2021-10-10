@@ -7,8 +7,31 @@
 
 	<fragment
 		android:id="@+id/homeFragment"
-		tools:layout="@layout/fragment_home"
 		android:name="quevedo.soares.leandro.techtest.view.home.HomeFragment"
-		android:label="HomeFragment" />
+		android:label="HomeFragment"
+		tools:layout="@layout/fragment_home">
+
+		<action
+			android:id="@+id/action_homeFragment_to_fighterDetailFragment"
+			app:enterAnim="@anim/anim_fade_in"
+			app:exitAnim="@anim/anim_fade_out"
+			app:popEnterAnim="@anim/anim_fade_in"
+			app:popExitAnim="@anim/anim_fade_out"
+			app:destination="@id/fighterDetailFragment" />
+
+	</fragment>
+
+	<fragment
+		android:id="@+id/fighterDetailFragment"
+		android:name="quevedo.soares.leandro.techtest.view.fighterdetail.FighterDetailFragment"
+		android:label="fragment_fighter_detail"
+		tools:layout="@layout/fragment_fighter_detail">
+
+		<argument
+			android:name="fighter"
+			app:argType="quevedo.soares.leandro.techtest.domain.model.Fighter"
+			app:nullable="false" />
+
+	</fragment>
 
 </navigation>

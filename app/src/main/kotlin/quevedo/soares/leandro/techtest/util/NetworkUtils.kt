@@ -7,6 +7,11 @@ import android.os.Build
 
 object NetworkUtils {
 
+	/**
+	 * Checks if the device is connected to the internet
+	 *
+	 * @return true when connected
+	 **/
 	fun isConnected(context: Context): Boolean {
 		val connectivityManager = context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
 

@@ -13,12 +13,19 @@
 
 	<!-- </editor-fold> -->
 
+	<!-- <editor-fold defaultstate="Collapsed" desc="Home" -->
+	<string name="home_menu_action_filter">Filter</string>
+	<string name="text_all">All</string>
+
 	<!-- <editor-fold defaultstate="Collapsed" desc="Fighter" -->
 	<string name="text_fighter_price">Price: $%1$s</string>
 	<string name="text_fighter_rate">Rate: %1$d</string>
 	<string name="text_fighter_downloads">Downloads: %1$s</string>
 	<!-- </editor-fold> -->
+	<!-- </editor-fold> -->
 
-	<string name="text_all">All</string>
+	<!-- <editor-fold defaultstate="Collapsed" desc="Fighter detail" -->
+	<string name="content_description_fighter_detail_avatar">Fighter\'s avatar image</string>
+	<!-- </editor-fold> -->
 
 </resources>

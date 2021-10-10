@@ -14,6 +14,10 @@
 		<action
 			android:id="@+id/action_onBoardingFragment_to_navigation_main"
 			app:destination="@id/navigation_home"
+			app:enterAnim="@anim/anim_fade_in"
+			app:exitAnim="@anim/anim_fade_out"
+			app:popEnterAnim="@anim/anim_fade_in"
+			app:popExitAnim="@anim/anim_fade_out"
 			app:popUpTo="@id/onBoardingFragment"
 			app:popUpToInclusive="true" />
 

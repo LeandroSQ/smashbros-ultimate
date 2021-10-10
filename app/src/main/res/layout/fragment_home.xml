@@ -1,60 +1,63 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.swiperefreshlayout.widget.SwipeRefreshLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
 	xmlns:app="http://schemas.android.com/apk/res-auto"
 	xmlns:tools="http://schemas.android.com/tools"
-	android:id="@+id/swipeToRefreshLayout"
 	android:layout_width="match_parent"
 	android:layout_height="match_parent">
 
-	<androidx.constraintlayout.widget.ConstraintLayout
+	<com.google.android.material.appbar.AppBarLayout
+		android:id="@+id/appBarLayout"
 		android:layout_width="match_parent"
-		android:layout_height="match_parent">
+		android:layout_height="wrap_content"
+		app:elevation="10dp"
+		app:layout_constraintEnd_toEndOf="parent"
+		app:layout_constraintStart_toStartOf="parent"
+		app:layout_constraintTop_toTopOf="parent">
 
-		<com.google.android.material.appbar.AppBarLayout
-			android:id="@+id/appBarLayout"
+		<com.google.android.material.appbar.MaterialToolbar
+			android:id="@+id/toolbar"
 			android:layout_width="match_parent"
 			android:layout_height="wrap_content"
-			app:layout_constraintEnd_toEndOf="parent"
-			app:layout_constraintStart_toStartOf="parent"
-			app:layout_constraintTop_toTopOf="parent">
+			android:background="?colorPrimary"
+			app:menu="@menu/menu_home"
+			app:title="@string/app_name"
+			app:titleTextAppearance="@style/Theme.App"
+			app:titleTextColor="@color/white">
 
-			<com.google.android.material.appbar.MaterialToolbar
-				android:id="@+id/toolbar"
-				android:layout_width="match_parent"
-				android:layout_height="wrap_content"
-				android:background="?colorPrimary"
-				app:title="@string/app_name"
-				app:titleTextAppearance="@style/Theme.App"
-				app:titleTextColor="@color/white">
 
-			</com.google.android.material.appbar.MaterialToolbar>
+		</com.google.android.material.appbar.MaterialToolbar>
 
-		</com.google.android.material.appbar.AppBarLayout>
+	</com.google.android.material.appbar.AppBarLayout>
 
-		<androidx.recyclerview.widget.RecyclerView
-			android:id="@+id/recyclerViewUniversesFilter"
-			android:layout_width="0dp"
-			android:layout_height="wrap_content"
-			android:layout_marginTop="10dp"
-			android:clipChildren="false"
-			android:clipToPadding="false"
-			android:orientation="horizontal"
-			android:paddingHorizontal="10dp"
-			app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-			app:layout_constraintEnd_toEndOf="parent"
-			app:layout_constraintStart_toStartOf="parent"
-			app:layout_constraintTop_toBottomOf="@id/appBarLayout"
-			tools:listitem="@layout/item_universe" />
+	<androidx.recyclerview.widget.RecyclerView
+		android:id="@+id/recyclerViewUniversesFilter"
+		android:layout_width="0dp"
+		android:layout_height="wrap_content"
+		android:layout_marginTop="10dp"
+		android:clipChildren="false"
+		android:clipToPadding="false"
+		android:orientation="horizontal"
+		android:paddingHorizontal="10dp"
+		app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+		app:layout_constraintEnd_toEndOf="parent"
+		app:layout_constraintStart_toStartOf="parent"
+		app:layout_constraintTop_toBottomOf="@id/appBarLayout"
+		tools:listitem="@layout/item_universe" />
+
+	<androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+		android:id="@+id/swipeToRefreshLayout"
+		android:layout_width="match_parent"
+		android:layout_height="0dp"
+		android:layout_marginTop="10dp"
+		app:layout_constraintBottom_toBottomOf="parent"
+		app:layout_constraintTop_toBottomOf="@id/recyclerViewUniversesFilter">
 
 		<androidx.recyclerview.widget.RecyclerView
 			android:id="@+id/recyclerViewFighters"
 			android:layout_width="match_parent"
-			android:layout_height="0dp"
-			android:layout_marginTop="10dp"
+			android:layout_height="match_parent"
 			app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-			app:layout_constraintBottom_toBottomOf="parent"
-			app:layout_constraintTop_toBottomOf="@id/recyclerViewUniversesFilter"
 			tools:listitem="@layout/item_fighter" />
 
-	</androidx.constraintlayout.widget.ConstraintLayout>
-</androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+	</androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

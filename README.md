@@ -1,6 +1,6 @@
 # Smash bros - Ultimate catalog
 - [x] Android 31 Splash screen API
-- [x] Navigation component
+- [x] Navigation component with SafeArgs
 - [x] Koin dependency injection
 - [x] MVVM with Clean architecture
 - [x] Retrofit and OkHttp
@@ -12,3 +12,5 @@
 - [x] Coil for image loading and OkHttp for caching
 - [x] ListAdapter for DiffUtil powered recyclerview updated
 - [x] Object box for local persistence
+- [x] Parcelize plugin
+- [x] Shared element transition

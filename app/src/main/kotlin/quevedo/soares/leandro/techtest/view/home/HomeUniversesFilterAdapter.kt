@@ -35,24 +35,25 @@ class HomeUniversesFilterAdapter : RecyclerView.Adapter<HomeUniversesFilterAdapt
 	// Appends a virtual item, the 'All' button
 	override fun getItemCount() = this.items.size + 1
 
-	private fun onItemSelected(new: Universe?, position: Int) {
-		var item = new
-
-		// If clicked again on the selected item, de-select it
-		if (selectedItem == item) item = null// Null meaning 'All'
-
+	private fun onItemSelected(item: Universe?, position: Int) {
 		// Notify that the current item changed
 		val lastSelectedIndex = items.indexOf(selectedItem) + 1
 
-		// Sets the new current item
-		selectedItem = item
+		// If clicked again on the selected item, de-select it
+		if (selectedItem == item) {
+			selectedItem = null// Null meaning 'All'
+			notifyItemChanged(0)
+		} else {
+			// Sets the new current item
+			selectedItem = item
+			notifyItemChanged(position)
+		}
 
 		// Notify changes
 		notifyItemChanged(lastSelectedIndex)
-		notifyItemChanged(position)
 
 		// Calls the listener
-		onItemSelectedListener?.invoke(item)
+		onItemSelectedListener?.invoke(selectedItem)
 	}
 
 	/**

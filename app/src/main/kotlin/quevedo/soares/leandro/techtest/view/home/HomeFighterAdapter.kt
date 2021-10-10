@@ -12,7 +12,7 @@ import quevedo.soares.leandro.techtest.databinding.ItemFighterBinding
 import quevedo.soares.leandro.techtest.domain.model.Fighter
 import quevedo.soares.leandro.techtest.extension.toFormattedInt
 
-typealias OnHomeFighterItemSelected = (Fighter) -> Unit
+typealias OnHomeFighterItemSelected = (Fighter, ItemFighterBinding) -> Unit
 
 class HomeFighterAdapter : ListAdapter<Fighter, HomeFighterAdapter.ViewHolder>(this) {
 
@@ -41,6 +41,7 @@ class HomeFighterAdapter : ListAdapter<Fighter, HomeFighterAdapter.ViewHolder>(t
 
 				// Uses coil to load the image with okhttp to handle caching
 				imageViewAvatar.load(item.avatar, imageLoader = KoinJavaComponent.getKoin().get())
+				imageViewAvatar.transitionName = item.avatar
 
 				textViewName.text = item.name
 				textViewUniverse.text = item.universe
@@ -49,7 +50,7 @@ class HomeFighterAdapter : ListAdapter<Fighter, HomeFighterAdapter.ViewHolder>(t
 				textViewDownloads.text = res.getString(R.string.text_fighter_downloads, item.downloads.toFormattedInt())
 
 				// Set the whole layout to be clickable
-				root.setOnClickListener { onItemSelectedListener?.invoke(item) }
+				root.setOnClickListener { onItemSelectedListener?.invoke(item, this) }
 			}
 		}
 

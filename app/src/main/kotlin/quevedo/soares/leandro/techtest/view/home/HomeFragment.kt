@@ -3,12 +3,11 @@ package quevedo.soares.leandro.techtest.view.home
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.util.Log
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.FragmentNavigatorExtras
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.ui.setupWithNavController
 import androidx.recyclerview.widget.DividerItemDecoration
@@ -16,6 +15,7 @@ import kotlinx.coroutines.flow.collect
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import quevedo.soares.leandro.techtest.R
 import quevedo.soares.leandro.techtest.databinding.FragmentHomeBinding
+import quevedo.soares.leandro.techtest.databinding.ItemFighterBinding
 import quevedo.soares.leandro.techtest.domain.model.Fighter
 import quevedo.soares.leandro.techtest.domain.model.Universe
 
@@ -28,13 +28,16 @@ class HomeFragment : Fragment() {
 	private val fightersAdapter by lazy { HomeFighterAdapter() }
 	private val universesAdapter by lazy { HomeUniversesFilterAdapter() }
 
-	override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+	override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
 		this.binding = FragmentHomeBinding.inflate(inflater, container, false)
 		return this.binding.root
 	}
 
 	override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 		super.onViewCreated(view, savedInstanceState)
+
+		// Postpone the enter transition, only starting it after the recyclerview has been configured
+		this.postponeEnterTransition()
 
 		this.setupToolbar()
 		this.setupSwipeToRefreshLayout()
@@ -53,6 +56,7 @@ class HomeFragment : Fragment() {
 
 	private fun setupToolbar() {
 		this.binding.toolbar.setupWithNavController(this.navController)
+
 	}
 
 	private fun setupSwipeToRefreshLayout() {
@@ -122,6 +126,12 @@ class HomeFragment : Fragment() {
 				// Set the decorator color
 				setDrawable(ColorDrawable(ContextCompat.getColor(requireContext(), R.color.divider_gray)))
 			})
+
+			// When about to draw the recyclerview, start the postponed transition
+			viewTreeObserver.addOnPreDrawListener {
+				startPostponedEnterTransition()
+				true
+			}
 		}
 	}
 
@@ -133,8 +143,11 @@ class HomeFragment : Fragment() {
 		this.viewModel.getFighters(fromUniverse = item)
 	}
 
-	private fun onFighterSelected(item: Fighter) {
-
+	private fun onFighterSelected(item: Fighter, binding: ItemFighterBinding) {
+		// Setup the views to be shared in the transition
+		val extras = FragmentNavigatorExtras(binding.imageViewAvatar to binding.imageViewAvatar.transitionName)
+		// Navigate to the fighter detail fragment
+		this.navController.navigate(HomeFragmentDirections.actionHomeFragmentToFighterDetailFragment(item), extras)
 	}
 
 }
