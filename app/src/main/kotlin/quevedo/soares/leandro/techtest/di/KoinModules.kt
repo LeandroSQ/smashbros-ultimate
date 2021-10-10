@@ -10,6 +10,7 @@ fun setupKoin(app: Application) {
 		modules(
 			moshiModule,
 			networkModule,
+			objectBoxModule,
 			dataModule,
 			viewModelModule,
 			coilModule

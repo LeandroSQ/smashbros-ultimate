@@ -8,15 +8,11 @@ import quevedo.soares.leandro.techtest.domain.model.Universe
 
 class GetFightersUseCase(private val repository: FighterRepository) {
 
-	suspend operator fun invoke(universe: Universe? = null) = flow {
+	suspend operator fun invoke(universe: Universe? = null, allowCache: Boolean) = flow {
 		emit(RequestState.Loading)
 
-		val response = repository.getFighters(universe?.name)
-		if (response.isNullOrEmpty()) {
-			throw Exception("Empty response")
-		} else {
-			emit(RequestState.Success(response))
-		}
+		val response = repository.getFighters(universe?.name, allowCache)
+		emit(RequestState.Success(response))
 	}.catch { e ->
 		e.printStackTrace()
 		emit(RequestState.Error(e))

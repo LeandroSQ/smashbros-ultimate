@@ -3,6 +3,7 @@ plugins {
     id "kotlin-android"
     id "kotlin-kapt"
     id "androidx.navigation.safeargs.kotlin"
+    id "io.objectbox"
 }
 
 android {
@@ -59,6 +60,7 @@ dependencies {
     /* Material */
     implementation "com.google.android.material:material:1.4.0"
     implementation "androidx.constraintlayout:constraintlayout:2.1.1"
+    implementation "androidx.swiperefreshlayout:swiperefreshlayout:1.1.0"
 
     /* Splashscreen */
     implementation 'androidx.core:core-splashscreen:1.0.0-alpha02'

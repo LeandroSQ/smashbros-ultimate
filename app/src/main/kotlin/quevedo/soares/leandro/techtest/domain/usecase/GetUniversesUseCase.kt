@@ -7,10 +7,10 @@ import quevedo.soares.leandro.techtest.domain.model.RequestState
 
 class GetUniversesUseCase(private val repository: UniverseRepository) {
 
-	suspend operator fun invoke() = flow {
+	suspend operator fun invoke(allowCache: Boolean) = flow {
 		emit(RequestState.Loading)
 
-		val response = repository.getUniverses()
+		val response = repository.getUniverses(allowCache)
 		emit(RequestState.Success(response))
 	}.catch { e ->
 		e.printStackTrace()

@@ -2,9 +2,12 @@ package quevedo.soares.leandro.techtest.di
 
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
+import org.koin.android.ext.koin.androidContext
 import org.koin.dsl.module
 import quevedo.soares.leandro.techtest.BuildConfig
+import quevedo.soares.leandro.techtest.data.datasource.FighterLocalDataSource
 import quevedo.soares.leandro.techtest.data.datasource.FighterRemoteDataSource
+import quevedo.soares.leandro.techtest.data.datasource.UniverseLocalDataSource
 import quevedo.soares.leandro.techtest.data.datasource.UniverseRemoteDataSource
 import quevedo.soares.leandro.techtest.data.repository.FighterRepository
 import quevedo.soares.leandro.techtest.data.repository.UniverseRepository
@@ -44,12 +47,14 @@ internal val networkModule = module {
 
 	// region Data sources
 	factory { FighterRemoteDataSource(get()) }
+	factory { FighterLocalDataSource(get()) }
+	factory { UniverseLocalDataSource(get()) }
 	factory { UniverseRemoteDataSource(get()) }
 	// endregion
 
 	// region Repositories
-	factory { FighterRepository(get()) }
-	factory { UniverseRepository(get()) }
+	factory { FighterRepository(androidContext(), get(), get()) }
+	factory { UniverseRepository(androidContext(), get(), get()) }
 	// endregion
 
 }

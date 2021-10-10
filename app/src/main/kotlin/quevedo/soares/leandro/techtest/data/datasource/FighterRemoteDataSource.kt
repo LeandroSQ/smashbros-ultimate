@@ -4,6 +4,6 @@ import quevedo.soares.leandro.techtest.data.service.IFighterService
 
 class FighterRemoteDataSource(private val service: IFighterService) {
 
-	suspend fun getUniverses(universeName: String? = null) = service.getFighters(universeName)
+	suspend fun getFighters(universeName: String? = null) = service.getFighters(universeName)
 
 }

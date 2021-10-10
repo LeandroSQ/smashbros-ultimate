@@ -36,21 +36,32 @@ class HomeFragment : Fragment() {
 	override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 		super.onViewCreated(view, savedInstanceState)
 
-		lifecycleScope.launchWhenCreated {
-			viewModel.getFighters()
-			viewModel.getUniverses()
-		}
-
 		this.setupToolbar()
+		this.setupSwipeToRefreshLayout()
 
 		lifecycleScope.launchWhenCreated { setupObservers() }
+		lifecycleScope.launchWhenCreated { loadData(allowCache = true) }
 
 		this.setupUniversesRecyclerView()
 		this.setupFightersRecyclerView()
 	}
 
+	private fun loadData(allowCache: Boolean) {
+		viewModel.getFighters(allowCache = allowCache)
+		viewModel.getUniverses(allowCache)
+	}
+
 	private fun setupToolbar() {
 		this.binding.toolbar.setupWithNavController(this.navController)
+	}
+
+	private fun setupSwipeToRefreshLayout() {
+		binding.swipeToRefreshLayout.setOnRefreshListener {
+			binding.swipeToRefreshLayout.isRefreshing = false
+
+			// Load data directly from the API, skipping cache
+			loadData(allowCache = false)
+		}
 	}
 
 	private suspend fun setupObservers() {
@@ -78,8 +89,7 @@ class HomeFragment : Fragment() {
 				}
 
 				is HomeViewModel.ViewState.UniversesLoaded -> {
-					universesAdapter.items = state.list
-					universesAdapter.notifyDataSetChanged()
+					universesAdapter.setItems(state.list)
 				}
 
 				is HomeViewModel.ViewState.UniversesError -> {
@@ -119,7 +129,7 @@ class HomeFragment : Fragment() {
 
 	}
 
-	private fun onUniverseSelected(item: Universe) {
+	private fun onUniverseSelected(item: Universe?) {
 		this.viewModel.getFighters(fromUniverse = item)
 	}
 

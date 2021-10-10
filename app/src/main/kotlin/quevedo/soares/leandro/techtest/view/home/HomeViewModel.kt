@@ -8,7 +8,7 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
-import quevedo.soares.leandro.techtest.domain.enum.SortByPropertyEnum
+import quevedo.soares.leandro.techtest.domain.enumerator.SortByPropertyEnum
 import quevedo.soares.leandro.techtest.domain.model.Fighter
 import quevedo.soares.leandro.techtest.domain.model.FighterFilter
 import quevedo.soares.leandro.techtest.domain.model.RequestState
@@ -23,9 +23,9 @@ class HomeViewModel(private val getUniversesUseCase: GetUniversesUseCase, privat
 	private val _viewState = MutableStateFlow<ViewState?>(null)
 	val viewState get() = this._viewState as StateFlow<ViewState?>
 
-	fun getUniverses() {
+	fun getUniverses(allowCache: Boolean = true) {
 		viewModelScope.launch(Dispatchers.IO) {
-			getUniversesUseCase().onEach {
+			getUniversesUseCase(allowCache).onEach {
 				when (it) {
 					is RequestState.Loading -> _viewState.emit(ViewState.LoadingUniverses)
 					is RequestState.Success -> _viewState.emit(ViewState.UniversesLoaded(it.response))
@@ -35,9 +35,9 @@ class HomeViewModel(private val getUniversesUseCase: GetUniversesUseCase, privat
 		}
 	}
 
-	fun getFighters(fromUniverse: Universe? = null) {
+	fun getFighters(fromUniverse: Universe? = null, allowCache: Boolean = true) {
 		viewModelScope.launch(Dispatchers.IO) {
-			getFightersUseCase().onEach {
+			getFightersUseCase(fromUniverse, allowCache).onEach {
 				when (it) {
 					is RequestState.Loading -> _viewState.emit(ViewState.LoadingFighters)
 					is RequestState.Success -> {

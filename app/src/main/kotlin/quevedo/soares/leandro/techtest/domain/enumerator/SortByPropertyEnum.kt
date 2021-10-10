@@ -1,4 +1,4 @@
-package quevedo.soares.leandro.techtest.domain.enum
+package quevedo.soares.leandro.techtest.domain.enumerator
 
 enum class SortByPropertyEnum {
 	Name,

@@ -2,11 +2,16 @@ package quevedo.soares.leandro.techtest.domain.model
 
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
+import io.objectbox.annotation.Entity
+import io.objectbox.annotation.Id
 import java.util.*
 
 @JsonClass(generateAdapter = true)
+@Entity
 data class Fighter(
-	@Json(name = "objectID") val id: String? = null,
+	@Id var id: Long = 0L,// ObjectBox - id
+
+	@Json(name = "objectID") val objectId: String? = null,
 	@Json(name = "name") val name: String? = null,
 	@Json(name = "universe") val universe: String? = null,
 	@Json(name = "price") val price: String? = null,
@@ -18,7 +23,7 @@ data class Fighter(
 	@Json(name = "imageURL") val avatar: String? = null,
 ) {
 
-	fun isContentEqualTo(other: Fighter) = this.id == other.id &&
+	fun isContentEqualTo(other: Fighter) = this.objectId == other.objectId &&
 			this.name == other.name &&
 			this.universe == other.universe &&
 			this.price == other.price &&

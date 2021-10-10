@@ -2,7 +2,13 @@
 - [x] Android 31 Splash screen API
 - [x] Navigation component
 - [x] Koin dependency injection
+- [x] MVVM with Clean architecture
 - [x] Retrofit and OkHttp
 - [x] Material design
+- [x] ViewPager2
 - [x] Moshi and moshi-codegen
 - [x] Constraint chaining
+- [x] Jetpack DataStore for preference persistence
+- [x] Coil for image loading and OkHttp for caching
+- [x] ListAdapter for DiffUtil powered recyclerview updated
+- [x] Object box for local persistence

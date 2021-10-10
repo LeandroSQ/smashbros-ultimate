@@ -19,4 +19,6 @@
 	<string name="text_fighter_downloads">Downloads: %1$s</string>
 	<!-- </editor-fold> -->
 
+	<string name="text_all">All</string>
+
 </resources>
