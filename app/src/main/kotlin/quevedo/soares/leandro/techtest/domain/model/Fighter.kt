@@ -11,7 +11,7 @@ data class Fighter(
 	@Json(name = "universe") val universe: String? = null,
 	@Json(name = "price") val price: String? = null,
 	@Json(name = "popular") val popular: Boolean = false,
-	@Json(name = "rate") val rate: UInt = 0u,
+	@Json(name = "rate") val rate: Int = 0,
 	@Json(name = "downloads") val downloads: String? = null,
 	@Json(name = "description") val description: String? = null,
 	@Json(name = "created_at") val created_at: Date? = null,

@@ -31,21 +31,23 @@
 		android:layout_width="0dp"
 		app:layout_constraintStart_toStartOf="parent"
 		android:layout_marginTop="10dp"
-		android:paddingHorizontal="5dp"
+		android:paddingHorizontal="10dp"
 		android:clipChildren="false"
 		android:clipToPadding="false"
 		app:layout_constraintEnd_toEndOf="parent"
 		app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
 		app:layout_constraintTop_toBottomOf="@id/appBarLayout"
 		android:orientation="horizontal"
-		tools:listitem="@layout/item_universe_default"
+		tools:listitem="@layout/item_universe"
 		android:layout_height="wrap_content" />
 
 	<androidx.recyclerview.widget.RecyclerView
 		app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
 		android:id="@+id/recyclerViewFighters"
 		android:layout_width="match_parent"
+		tools:listitem="@layout/item_fighter"
 		android:layout_marginTop="10dp"
+		app:layout_constraintBottom_toBottomOf="parent"
 		app:layout_constraintTop_toBottomOf="@id/recyclerViewUniversesFilter"
 		android:layout_height="0dp" />
 

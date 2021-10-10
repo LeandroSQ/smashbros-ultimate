@@ -10,36 +10,36 @@ import quevedo.soares.leandro.techtest.data.repository.FighterRepository
 import quevedo.soares.leandro.techtest.data.repository.UniverseRepository
 import quevedo.soares.leandro.techtest.data.service.IFighterService
 import quevedo.soares.leandro.techtest.data.service.IUniverseService
-import quevedo.soares.leandro.techtest.extension.singleDebug
 import quevedo.soares.leandro.techtest.util.isInDebugMode
 import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
+import java.util.concurrent.TimeUnit
 
 internal val networkModule = module {
-	// Only available at Debug variants
-	singleDebug { HttpLoggingInterceptor().apply { level = HttpLoggingInterceptor.Level.BODY } }
 
 	// OkHttp
 	single {
 		OkHttpClient.Builder()
-			.apply {
-				if (isInDebugMode()) addInterceptor(get<HttpLoggingInterceptor>())
-			}
+				.apply {
+					// Only available at Debug variants
+					if (isInDebugMode()) addInterceptor(HttpLoggingInterceptor().apply { level = HttpLoggingInterceptor.Level.BODY })
+				}
+				.callTimeout(10L, TimeUnit.SECONDS)
 			.build()
 	}
 
 	// Retrofit
 	factory {
 		Retrofit.Builder()
-			.baseUrl(BuildConfig.SERVER_BASE_URL)
-			.client(get())
-			.addConverterFactory(get<MoshiConverterFactory>())
-			.build()
+				.baseUrl(BuildConfig.SERVER_BASE_URL)
+				.client(get())
+				.addConverterFactory(get<MoshiConverterFactory>())
+				.build()
 	}
 
 	// region Services
-	factory { get<Retrofit>().create(IFighterService::class.java) }
-	factory { get<Retrofit>().create(IUniverseService::class.java) }
+	single { get<Retrofit>().create(IFighterService::class.java) }
+	single { get<Retrofit>().create(IUniverseService::class.java) }
 	// endregion
 
 	// region Data sources
@@ -51,4 +51,5 @@ internal val networkModule = module {
 	factory { FighterRepository(get()) }
 	factory { UniverseRepository(get()) }
 	// endregion
+
 }

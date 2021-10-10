@@ -11,11 +11,7 @@ class GetUniversesUseCase(private val repository: UniverseRepository) {
 		emit(RequestState.Loading)
 
 		val response = repository.getUniverses()
-		if (response.isNullOrEmpty()) {
-			throw Exception("Empty response")
-		} else {
-			emit(RequestState.Success(response))
-		}
+		emit(RequestState.Success(response))
 	}.catch { e ->
 		e.printStackTrace()
 		emit(RequestState.Error(e))

@@ -9,5 +9,5 @@ data class Universe(
 	@Json(name = "name") val name: String? = null,
 	@Json(name = "description") val description: String? = null,
 
-	@Transient var selected: Boolean = false
+	@Transient var isSelected: Boolean = false
 )
