@@ -7,7 +7,9 @@
 		<attr name="android:value" format="integer" />
 		<attr name="starPaddingHorizontal" format="dimension" />
 		<attr name="starPaddingVertical" format="dimension" />
+		<attr name="starSize" format="dimension" />
 		<attr name="colorActive" format="color|reference" />
+		<attr name="android:enabled" format="boolean" />
 		<attr name="colorInactive" format="reference|color" />
 	</declare-styleable>
 

@@ -56,6 +56,7 @@ class RatingBar : View {
 	var inactiveColor = Color.DKGRAY
 
 	private lateinit var starImage: Drawable
+	private var desiredStarSize: Float? = null
 	private var starSize = 0
 	private var starPaddingHorizontal = 0f
 	private var starPaddingVertical = 0f
@@ -86,6 +87,11 @@ class RatingBar : View {
 	init {
 		// Enable the onDraw method
 		setWillNotDraw(false)
+
+		// Only for preview
+		if (isInEditMode) {
+			this.value = 3
+		}
 	}
 
 	private fun setupAttributes(context: Context, attributeSet: AttributeSet? = null, defStyleAttr: Int = 0, defStyleRes: Int = 0) {
@@ -100,18 +106,15 @@ class RatingBar : View {
 			getInteger(R.styleable.RatingBar_android_value, 0).let { value = it }
 			getInteger(R.styleable.RatingBar_android_min, 0).let { minValue = it }
 			getInteger(R.styleable.RatingBar_android_max, 5).let { maxValue = it }
+			getBoolean(R.styleable.RatingBar_android_enabled, true).let { isEnabled = it }
 			getDimension(R.styleable.RatingBar_starPaddingHorizontal, 0f).let { starPaddingHorizontal = it }
 			getDimension(R.styleable.RatingBar_starPaddingVertical, 0f).let { starPaddingVertical = it }
 			getColor(R.styleable.RatingBar_colorActive, Color.YELLOW).let { activeColor = it }
 			getColor(R.styleable.RatingBar_colorInactive, Color.DKGRAY).let { inactiveColor = it }
+			getDimension(R.styleable.RatingBar_starSize, 0f).let { if (it != 0f) desiredStarSize = it }
 
 			// Disposes the attributes array
 			recycle()
-		}
-
-		// Only for preview
-		if (isInEditMode) {
-			this.value = 3
 		}
 	}
 
@@ -132,6 +135,9 @@ class RatingBar : View {
 
 	@SuppressLint("ClickableViewAccessibility")
 	override fun onTouchEvent(event: MotionEvent?): Boolean {
+		// Ignore touch events when the view is disabled
+		if (!this.isEnabled) return false
+
 		event?.let {
 			// Ignore useless events
 			if (!CONSUMED_EVENTS.contains(event.action)) return@let
@@ -144,6 +150,7 @@ class RatingBar : View {
 					// Stores the initial position of the first touch, to calculate the travel
 					this.initialPosition = position
 
+					// Consume event
 					return true
 				}
 
@@ -164,6 +171,7 @@ class RatingBar : View {
 
 					this.processTouchEvent(position.x)
 
+					// Consume event
 					return true
 				}
 
@@ -176,6 +184,7 @@ class RatingBar : View {
 					// Stop dragging
 					isDragging = false
 
+					// Consume event
 					return true
 				}
 			}
@@ -187,29 +196,36 @@ class RatingBar : View {
 	override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
 		super.onMeasure(widthMeasureSpec, heightMeasureSpec)
 
+		// Gets the mode and sizing of the provided measure spec
 		val widthMode = MeasureSpec.getMode(widthMeasureSpec)
 		val widthSize = MeasureSpec.getSize(widthMeasureSpec)
 		val heightSize = MeasureSpec.getSize(heightMeasureSpec).toFloat()
 
-		// Calculate the minimum width
-		this.starSize = kotlin.math.min(
-			(widthSize - starPaddingHorizontal * (starCount)) / starCount,
-			heightSize - starPaddingHorizontal * 2
-		).toInt()
+		if (this.desiredStarSize == null) {
+			// If a fixed size was not provided, calculate a dynamic size for the stars
+			this.starSize = kotlin.math.min(
+				(widthSize - starPaddingHorizontal * (starCount)) / starCount,
+				heightSize - starPaddingHorizontal * 2
+			).toInt()
+		} else {
+			// Otherwise set the starSize to be fixed
+			this.starSize = this.desiredStarSize!!.toInt()
+		}
+
+		// Calculate the content dimensions
 		val desiredWidth = ((starSize + starPaddingHorizontal) * starCount).toInt()
+		val desiredHeight = (this.starSize + starPaddingVertical * 2).toInt()
 
+		// Aplly them
 		when (widthMode) {
-			MeasureSpec.AT_MOST -> {
-				setMeasuredDimension(kotlin.math.min(desiredWidth, widthSize), (this.starSize + starPaddingVertical * 2).toInt())
-			}
+			// The minimum between the content width and the specified width
+			MeasureSpec.AT_MOST -> setMeasuredDimension(kotlin.math.min(desiredWidth, widthSize), desiredHeight)
 
-			MeasureSpec.EXACTLY -> {
-				setMeasuredDimension(widthSize, (this.starSize + starPaddingVertical * 2).toInt())
-			}
+			// Exactly the specified width
+			MeasureSpec.EXACTLY -> setMeasuredDimension(widthSize, desiredHeight)
 
-			MeasureSpec.UNSPECIFIED -> {
-				setMeasuredDimension(desiredWidth, (this.starSize + starPaddingVertical * 2).toInt())
-			}
+			// The content width
+			MeasureSpec.UNSPECIFIED -> setMeasuredDimension(desiredWidth, desiredHeight)
 		}
 
 	}
@@ -234,15 +250,17 @@ class RatingBar : View {
 		this.starImage.setBounds(0, 0, starSize, starSize)
 
 		// Iterates trough the stars
-		for (i in 0..starCount) {
+		for (i in 0 until starCount) {
 			// Tints the star image accordingly
 			this.starImage.setTint(if (i < this.value) activeColor else inactiveColor)
 
 			// Draws the image in the canvas
 			this.starImage.draw(canvas)
 
-			// Translate the next star
-			canvas.translate(starSize + starPaddingHorizontal, 0f)
+			if (i <= starCount) {
+				// Translate the next star
+				canvas.translate(starSize + starPaddingHorizontal, 0f)
+			}
 		}
 
 		// Restores the canvas matrix

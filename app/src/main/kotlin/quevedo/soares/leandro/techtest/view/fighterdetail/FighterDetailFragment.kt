@@ -56,6 +56,11 @@ class FighterDetailFragment : Fragment() {
 			this.textViewPrice.text = getString(R.string.text_fighter_price, fighter.price)
 			this.textViewDescription.text = fighter.description
 
+			// Animates the rating bar after 450ms
+			this.ratingBar.postDelayed({
+				this.ratingBar.value = fighter.rate
+			}, 450)
+
 			// Uses coil to load the image with okhttp to handle caching
 			this.imageViewAvatar.load(fighter.avatar) {
 				// After the image has been loaded, start the transition
