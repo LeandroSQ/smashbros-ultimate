@@ -5,7 +5,7 @@ import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 import io.objectbox.annotation.Entity
 import io.objectbox.annotation.Id
-import kotlinx.android.parcel.Parcelize
+import kotlinx.parcelize.Parcelize
 import java.util.*
 
 @JsonClass(generateAdapter = true)

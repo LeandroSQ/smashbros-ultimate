@@ -1,12 +1,11 @@
 package quevedo.soares.leandro.techtest.di
 
-import org.koin.android.ext.koin.androidContext
 import org.koin.dsl.module
 import quevedo.soares.leandro.techtest.R
-import quevedo.soares.leandro.techtest.data.datasource.FighterLocalDataSource
-import quevedo.soares.leandro.techtest.data.datasource.FighterRemoteDataSource
-import quevedo.soares.leandro.techtest.data.datasource.UniverseLocalDataSource
-import quevedo.soares.leandro.techtest.data.datasource.UniverseRemoteDataSource
+import quevedo.soares.leandro.techtest.data.datasource.local.FighterLocalDataSource
+import quevedo.soares.leandro.techtest.data.datasource.local.UniverseLocalDataSource
+import quevedo.soares.leandro.techtest.data.datasource.remote.FighterRemoteDataSource
+import quevedo.soares.leandro.techtest.data.datasource.remote.UniverseRemoteDataSource
 import quevedo.soares.leandro.techtest.data.repository.FighterRepository
 import quevedo.soares.leandro.techtest.data.repository.UniverseRepository
 import quevedo.soares.leandro.techtest.domain.model.OnBoardingPage
@@ -33,8 +32,8 @@ internal val dataModule = module {
 	// endregion
 
 	// region Repositories
-	factory { FighterRepository(androidContext(), get(), get()) }
-	factory { UniverseRepository(androidContext(), get(), get()) }
+	factory { FighterRepository(get(), get(), get()) }
+	factory { UniverseRepository(get(), get(), get()) }
 	// endregion
 
 	// region Use cases

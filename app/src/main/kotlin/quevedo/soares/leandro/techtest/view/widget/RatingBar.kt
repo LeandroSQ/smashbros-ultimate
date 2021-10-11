@@ -87,11 +87,6 @@ class RatingBar : View {
 	init {
 		// Enable the onDraw method
 		setWillNotDraw(false)
-
-		// Only for preview
-		if (isInEditMode) {
-			this.value = 3
-		}
 	}
 
 	private fun setupAttributes(context: Context, attributeSet: AttributeSet? = null, defStyleAttr: Int = 0, defStyleRes: Int = 0) {
@@ -115,6 +110,12 @@ class RatingBar : View {
 
 			// Disposes the attributes array
 			recycle()
+		}
+
+		// Only for preview
+		if (isInEditMode) {
+			this.isDragging = true
+			this.value = 3
 		}
 	}
 

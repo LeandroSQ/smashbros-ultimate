@@ -14,10 +14,10 @@ internal val coilModule = module {
 				.availableMemoryPercentage(0.25)
 				.crossfade(true)
 				.placeholder(R.drawable.shape_logo)
-			.okHttpClient { // Define the caching system
-				OkHttpClient.Builder().cache(CoilUtils.createDefaultCache(androidContext())).build()
-			}
-			.build()
+				.okHttpClient { // Define the caching system
+					OkHttpClient.Builder().cache(CoilUtils.createDefaultCache(androidContext())).build()
+				}
+				.build()
 	}
 
 }

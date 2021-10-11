@@ -14,3 +14,8 @@
 - [x] Object box for local persistence
 - [x] Parcelize plugin
 - [x] Shared element transition
+- [x] Kotlin Coroutines
+- [x] Jetpack State Flow
+- [x] Jetpack Lifecycle aware
+- [x] Skeleton adapter (Custom made)
+- [x] Rating bar (Custom made)

@@ -1,4 +1,4 @@
-package quevedo.soares.leandro.techtest.data.datasource
+package quevedo.soares.leandro.techtest.data.datasource.local
 
 import io.objectbox.BoxStore
 import quevedo.soares.leandro.techtest.domain.model.Universe

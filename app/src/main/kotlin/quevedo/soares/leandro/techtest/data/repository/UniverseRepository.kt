@@ -1,15 +1,14 @@
 package quevedo.soares.leandro.techtest.data.repository
 
-import android.content.Context
-import quevedo.soares.leandro.techtest.data.datasource.UniverseLocalDataSource
-import quevedo.soares.leandro.techtest.data.datasource.UniverseRemoteDataSource
+import quevedo.soares.leandro.techtest.data.datasource.local.UniverseLocalDataSource
+import quevedo.soares.leandro.techtest.data.datasource.remote.UniverseRemoteDataSource
 import quevedo.soares.leandro.techtest.domain.model.Universe
-import quevedo.soares.leandro.techtest.util.NetworkUtils
+import quevedo.soares.leandro.techtest.helper.NetworkHelper
 
-class UniverseRepository(private val context: Context, private val remote: UniverseRemoteDataSource, private val local: UniverseLocalDataSource) {
+class UniverseRepository(private val networkHelper: NetworkHelper, private val remote: UniverseRemoteDataSource, private val local: UniverseLocalDataSource) {
 
 	suspend fun getUniverses(allowCache: Boolean): List<Universe> {
-		return if (NetworkUtils.isConnected(context) || !allowCache) {
+		return if (networkHelper.isConnected() || !allowCache) {
 			this.remote.getUniverses()
 					.also { this.local.storeUniverses(it) }
 		} else {

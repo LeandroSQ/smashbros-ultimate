@@ -58,7 +58,7 @@ class HomeUniversesFilterAdapter : RecyclerView.Adapter<HomeUniversesFilterAdapt
 
 	/**
 	 * Updates the list to a new set of items
-	 * Resets the [selectedItem] as well
+	 * Updating the [selectedItem] as well
 	 **/
 	@SuppressLint("NotifyDataSetChanged")
 	fun setItems(items: List<Universe>) {

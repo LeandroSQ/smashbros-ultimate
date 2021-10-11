@@ -28,6 +28,17 @@ class HomeFragment : Fragment() {
 	private val fightersAdapter by lazy { HomeFighterAdapter() }
 	private val universesAdapter by lazy { HomeUniversesFilterAdapter() }
 
+	override fun onCreate(savedInstanceState: Bundle?) {
+		super.onCreate(savedInstanceState)
+
+		setupObservers()
+
+		lifecycleScope.launchWhenCreated {
+			viewModel.getFighters(allowCache = true)
+			viewModel.getUniverses(allowCache = true)
+		}
+	}
+
 	override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
 		this.binding = FragmentHomeBinding.inflate(inflater, container, false)
 		return this.binding.root
@@ -39,17 +50,10 @@ class HomeFragment : Fragment() {
 		// Postpone the enter transition, only starting it after the recyclerview has been configured
 		this.postponeEnterTransition()
 
-		this.setupToolbar()
-		this.setupSwipeToRefreshLayout()
-
-		lifecycleScope.launchWhenCreated { setupObservers() }
-		lifecycleScope.launchWhenCreated {
-			viewModel.getFighters(allowCache = true)
-			viewModel.getUniverses(allowCache = true)
-		}
-
-		this.setupUniversesRecyclerView()
-		this.setupFightersRecyclerView()
+		setupToolbar()
+		setupSwipeToRefreshLayout()
+		setupUniversesRecyclerView()
+		setupFightersRecyclerView()
 	}
 
 	private fun setupToolbar() {
@@ -69,46 +73,52 @@ class HomeFragment : Fragment() {
 		}
 	}
 
-	private suspend fun setupObservers() {
-		viewModel.viewState.collect { state ->
-			when (state) {
+	private fun setupObservers() {
+		lifecycleScope.launchWhenCreated {
+			viewModel.viewState.collect { state ->
+				when (state) {
 
-				// region Fighters
-				HomeViewModel.ViewState.LoadingFighters -> {
+					// region Fighters
+					HomeViewModel.ViewState.LoadingFighters -> {
+						// Hide the no result image
+						binding.imageViewNoResults.visibility = View.GONE
 
-				}
-
-				is HomeViewModel.ViewState.FightersLoaded -> {
-					// In case the list is empty
-					if (state.list.isEmpty()) {
-						binding.imageViewNoResults.visibility = View.VISIBLE// Show the no results image
-					} else {
-						binding.imageViewNoResults.visibility = View.GONE// Hide the no results image
+						// Shows the skeleton loading
+						binding.recyclerViewFighters.adapter = SkeletonAdapter(R.layout.item_fighter)
 					}
 
-					// Update the recycler view
-					fightersAdapter.setItems(state.list)
+					is HomeViewModel.ViewState.FightersLoaded -> {
+						// Update the recycler view
+						fightersAdapter.setItems(state.list)
+						binding.recyclerViewFighters.adapter = fightersAdapter
+
+						// Shows the no result image if the list is empty
+						if (state.list.isEmpty()) binding.imageViewNoResults.visibility = View.VISIBLE
+					}
+
+					is HomeViewModel.ViewState.FightersError -> {
+						Log.e("HomeFragment", "Error -> ${state.throwable}")
+					}
+					// endregion
+
+					// region Universes
+					HomeViewModel.ViewState.LoadingUniverses -> {
+						// Shows the skeleton loading
+						binding.recyclerViewUniversesFilter.adapter = SkeletonAdapter(R.layout.item_universe)
+					}
+
+					is HomeViewModel.ViewState.UniversesLoaded -> {
+						// Update the recycler view
+						universesAdapter.setItems(state.list)
+						binding.recyclerViewUniversesFilter.adapter = universesAdapter
+					}
+
+					is HomeViewModel.ViewState.UniversesError -> {
+						Log.e("HomeFragment", "Error -> ${state.throwable}")
+					}
+					// endregion
+
 				}
-
-				is HomeViewModel.ViewState.FightersError -> {
-					Log.e("HomeFragment", "Error -> ${state.throwable}")
-				}
-				// endregion
-
-				// region Universes
-				HomeViewModel.ViewState.LoadingUniverses -> {
-
-				}
-
-				is HomeViewModel.ViewState.UniversesLoaded -> {
-					universesAdapter.setItems(state.list)
-				}
-
-				is HomeViewModel.ViewState.UniversesError -> {
-					Log.e("HomeFragment", "Error -> ${state.throwable}")
-				}
-				// endregion
-
 			}
 		}
 	}

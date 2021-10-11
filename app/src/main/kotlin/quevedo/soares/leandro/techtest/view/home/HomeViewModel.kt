@@ -2,7 +2,7 @@ package quevedo.soares.leandro.techtest.view.home
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.launchIn
@@ -16,7 +16,7 @@ import quevedo.soares.leandro.techtest.domain.model.Universe
 import quevedo.soares.leandro.techtest.domain.usecase.GetFightersUseCase
 import quevedo.soares.leandro.techtest.domain.usecase.GetUniversesUseCase
 
-class HomeViewModel(private val getUniversesUseCase: GetUniversesUseCase, private val getFightersUseCase: GetFightersUseCase) : ViewModel() {
+class HomeViewModel(private val dispatcher: CoroutineDispatcher, private val getUniversesUseCase: GetUniversesUseCase, private val getFightersUseCase: GetFightersUseCase) : ViewModel() {
 
 	var filter: FighterFilter = FighterFilter()
 
@@ -24,7 +24,7 @@ class HomeViewModel(private val getUniversesUseCase: GetUniversesUseCase, privat
 	val viewState get() = this._viewState as StateFlow<ViewState?>
 
 	fun getUniverses(allowCache: Boolean = true) {
-		viewModelScope.launch(Dispatchers.IO) {
+		viewModelScope.launch(dispatcher) {
 			getUniversesUseCase(allowCache).onEach {
 				when (it) {
 					is RequestState.Loading -> _viewState.emit(ViewState.LoadingUniverses)
@@ -36,7 +36,7 @@ class HomeViewModel(private val getUniversesUseCase: GetUniversesUseCase, privat
 	}
 
 	fun getFighters(allowCache: Boolean = true) {
-		viewModelScope.launch(Dispatchers.IO) {
+		viewModelScope.launch(dispatcher) {
 			getFightersUseCase(filter.universeName, allowCache).onEach {
 				when (it) {
 					is RequestState.Loading -> _viewState.emit(ViewState.LoadingFighters)
@@ -51,19 +51,24 @@ class HomeViewModel(private val getUniversesUseCase: GetUniversesUseCase, privat
 		}
 	}
 
-	private fun filterFighters(list: List<Fighter>): List<Fighter> {
+	fun filterFighters(list: List<Fighter>): List<Fighter> {
 		var filteredList = list
 
 		// If rating was provided, filter by it
 		if (this.filter.rating != null) filteredList = filteredList.filter { it.rate == this.filter.rating }
 
 		// If a property was provided, sort by it
-		if (this.filter.sortBy != null) filteredList = filteredList.sortedBy {
-			when (filter.sortBy!!) {
-				SortByPropertyEnum.Name -> it.name
-				SortByPropertyEnum.Price -> it.price
-				SortByPropertyEnum.Rate -> it.rate.toString()
-				SortByPropertyEnum.Downloads -> it.downloads
+		if (this.filter.sortBy != null) {
+			filteredList = if (this.filter.sortBy == SortByPropertyEnum.Name) {
+				filteredList.sortedBy { it.name }
+			} else {
+				filteredList.sortedByDescending {
+					when (filter.sortBy!!) {
+						SortByPropertyEnum.Price -> (it.price ?: "0").toInt()
+						SortByPropertyEnum.Rate -> it.rate
+						else -> (it.downloads ?: "0").toInt()
+					}
+				}
 			}
 		}
 

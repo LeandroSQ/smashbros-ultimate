@@ -1,20 +1,17 @@
-package quevedo.soares.leandro.techtest.util
+package quevedo.soares.leandro.techtest.helper
 
-import android.content.Context
 import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
 import android.os.Build
 
-object NetworkUtils {
+class NetworkHelper(private val connectivityManager: ConnectivityManager) {
 
 	/**
 	 * Checks if the device is connected to the internet
 	 *
 	 * @return true when connected
 	 **/
-	fun isConnected(context: Context): Boolean {
-		val connectivityManager = context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
-
+	fun isConnected(): Boolean {
 		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
 			val capabilities = connectivityManager.getNetworkCapabilities(connectivityManager.activeNetwork)
 			return capabilities?.hasCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET) ?: false

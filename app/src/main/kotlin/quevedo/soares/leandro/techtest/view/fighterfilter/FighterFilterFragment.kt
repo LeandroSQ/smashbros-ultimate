@@ -1,7 +1,6 @@
 package quevedo.soares.leandro.techtest.view.fighterfilter
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -67,7 +66,7 @@ class FighterFilterFragment : Fragment() {
 				// Apply the filtering by rate
 				viewModel.filter.rating = if (ratingBar.value == 0) null else ratingBar.value
 
-				Log.d("FighterFilterFragment", "setupApplyButton: ${viewModel.filter}")
+				viewModel.getFighters(true)
 
 				// Navigates back
 				navController.popBackStack()

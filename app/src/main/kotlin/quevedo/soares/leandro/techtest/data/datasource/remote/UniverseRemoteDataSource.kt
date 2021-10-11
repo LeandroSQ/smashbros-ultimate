@@ -1,4 +1,4 @@
-package quevedo.soares.leandro.techtest.data.datasource
+package quevedo.soares.leandro.techtest.data.datasource.remote
 
 import quevedo.soares.leandro.techtest.data.service.IUniverseService
 
