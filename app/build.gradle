@@ -96,7 +96,7 @@ dependencies {
 
     /* Mockito */
     testImplementation "com.nhaarman.mockitokotlin2:mockito-kotlin:2.2.0"
-    testImplementation "org.mockito:mockito-inline:2.13.0"
+    testImplementation "org.mockito:mockito-inline:3.9.0"
 
     /* Testing */
     testImplementation "junit:junit:4.13.2"
