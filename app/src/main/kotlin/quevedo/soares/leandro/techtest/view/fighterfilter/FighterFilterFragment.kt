@@ -17,12 +17,12 @@ import quevedo.soares.leandro.techtest.view.home.HomeViewModel
 class FighterFilterFragment : Fragment() {
 
 	private val viewModel by sharedViewModel<HomeViewModel>()
-	private lateinit var binding: FragmentFighterFilterBinding
+	private var binding: FragmentFighterFilterBinding? = null
 	private val navController by lazy { findNavController() }
 
-	override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
+	override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
 		this.binding = FragmentFighterFilterBinding.inflate(inflater, container, false)
-		return this.binding.root
+		return this.binding?.root
 	}
 
 	override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -36,11 +36,11 @@ class FighterFilterFragment : Fragment() {
 	}
 
 	private fun setupToolbar() {
-		this.binding.toolbar.setupWithNavController(this.navController)
+		this.binding?.toolbar?.setupWithNavController(this.navController)
 	}
 
 	private fun setupResetButton() {
-		this.binding.apply {
+		this.binding?.apply {
 			buttonReset.setOnClickListener {
 				// Clears the rating
 				radioGroup.clearCheck()
@@ -54,7 +54,7 @@ class FighterFilterFragment : Fragment() {
 	}
 
 	private fun setupApplyButton() {
-		this.binding.apply {
+		this.binding?.apply {
 			buttonApply.setOnClickListener {
 				// Search for the selected radio button
 				(radioGroup.children.find { it.id == radioGroup.checkedRadioButtonId } as? RadioButton)?.let { button ->

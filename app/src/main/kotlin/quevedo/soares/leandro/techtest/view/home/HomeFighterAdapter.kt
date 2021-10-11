@@ -1,17 +1,24 @@
 package quevedo.soares.leandro.techtest.view.home
 
 import android.annotation.SuppressLint
+import android.graphics.Color
+import android.graphics.drawable.BitmapDrawable
+import android.graphics.drawable.GradientDrawable
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.annotation.ColorInt
+import androidx.cardview.widget.CardView
+import androidx.palette.graphics.Palette
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import coil.load
+import coil.ImageLoader
+import coil.request.ImageRequest
 import org.koin.java.KoinJavaComponent
-import quevedo.soares.leandro.techtest.R
 import quevedo.soares.leandro.techtest.databinding.ItemFighterBinding
 import quevedo.soares.leandro.techtest.domain.model.Fighter
-import quevedo.soares.leandro.techtest.extension.toFormattedInt
+import quevedo.soares.leandro.techtest.util.ColorUtil
+
 
 typealias OnHomeFighterItemSelected = (Fighter, ItemFighterBinding) -> Unit
 
@@ -47,14 +54,20 @@ class HomeFighterAdapter : ListAdapter<Fighter, HomeFighterAdapter.ViewHolder>(t
 				val res = root.context.resources
 
 				// Uses coil to load the image with okhttp to handle caching
-				imageViewAvatar.load(item.avatar, imageLoader = KoinJavaComponent.getKoin().get())
+				val imageLoader = KoinJavaComponent.getKoin().get<ImageLoader>()
+				imageLoader.enqueue(
+					ImageRequest.Builder(root.context)
+							.data(item.avatar)
+							.target { result ->
+								imageViewAvatar.setImageDrawable(result)
+								imageViewAvatar.background = ColorUtil.generateGradient(ColorUtil.getBackgroundColor(result, Color.BLACK), GradientDrawable.OVAL)
+							}
+							.build()
+				)
+
 				imageViewAvatar.transitionName = item.avatar
 
 				textViewName.text = item.name
-				textViewUniverse.text = item.universe
-				textViewPrice.text = res.getString(R.string.text_fighter_price, item.price)
-				textViewRate.text = res.getString(R.string.text_fighter_rate, item.rate)
-				textViewDownloads.text = res.getString(R.string.text_fighter_downloads, item.downloads.toFormattedInt())
 
 				// Set the whole layout to be clickable
 				root.setOnClickListener { onItemSelectedListener?.invoke(item, this) }

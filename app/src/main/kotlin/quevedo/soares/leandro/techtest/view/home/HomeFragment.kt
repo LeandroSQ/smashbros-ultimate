@@ -1,18 +1,16 @@
 package quevedo.soares.leandro.techtest.view.home
 
-import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.util.Log
 import android.view.*
-import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.FragmentNavigatorExtras
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupWithNavController
-import androidx.recyclerview.widget.DividerItemDecoration
 import com.google.android.material.snackbar.Snackbar
+import com.google.android.material.tabs.TabLayout
 import kotlinx.coroutines.flow.collect
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 import quevedo.soares.leandro.techtest.R
@@ -25,10 +23,10 @@ class HomeFragment : Fragment() {
 
 	private val viewModel: HomeViewModel by sharedViewModel()
 	private val navController by lazy { findNavController() }
-	private lateinit var binding: FragmentHomeBinding
+	private var binding: FragmentHomeBinding? = null
 
 	private val fightersAdapter by lazy { HomeFighterAdapter() }
-	private val universesAdapter by lazy { HomeUniversesFilterAdapter() }
+	private var universes = listOf<Universe>()
 
 	override fun onCreate(savedInstanceState: Bundle?) {
 		super.onCreate(savedInstanceState)
@@ -41,9 +39,9 @@ class HomeFragment : Fragment() {
 		}
 	}
 
-	override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
+	override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
 		this.binding = FragmentHomeBinding.inflate(inflater, container, false)
-		return this.binding.root
+		return this.binding?.root
 	}
 
 	override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -54,21 +52,57 @@ class HomeFragment : Fragment() {
 
 		setupToolbar()
 		setupSwipeToRefreshLayout()
-		setupUniversesRecyclerView()
+		setupTabLayout()
 		setupFightersRecyclerView()
 	}
 
 	private fun setupToolbar() {
-		this.binding.toolbar.setupWithNavController(this.navController, AppBarConfiguration(setOf(R.id.homeFragment, R.id.onBoardingFragment)))
-		this.binding.toolbar.setOnMenuItemClickListener {
-			onFilterButtonClick()
-			true
+		this.binding?.toolbar?.apply {
+			setupWithNavController(navController, AppBarConfiguration(setOf(R.id.homeFragment, R.id.onBoardingFragment)))
+			setOnMenuItemClickListener {
+				onFilterButtonClick()
+				true
+			}
+		}
+
+	}
+
+	private fun setupTabLayout() {
+		if (universes.isEmpty()) return
+
+		this.binding?.tabLayout?.apply {
+
+			// Clears the current tabs
+			removeAllTabs()
+
+			// Adds the 'All' tab
+			addTab(newTab().setText("All"))
+
+			// Maps every universe into a tab
+			universes.forEach { addTab(newTab().setText(it.name)) }
+
+			addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
+
+				override fun onTabUnselected(tab: TabLayout.Tab?) = Unit
+
+				override fun onTabSelected(tab: TabLayout.Tab?) {
+					onUniverseSelected(tab.takeIf { selectedTabPosition != 0 }?.text?.toString())
+				}
+
+				override fun onTabReselected(tab: TabLayout.Tab?) {
+					// When re-select a tab, select 'All'
+					post { selectTab(getTabAt(0)) }
+				}
+
+			})
+
+			visibility = View.VISIBLE
 		}
 	}
 
 	private fun setupSwipeToRefreshLayout() {
-		binding.swipeToRefreshLayout.setOnRefreshListener {
-			binding.swipeToRefreshLayout.isRefreshing = false
+		binding?.swipeToRefreshLayout?.setOnRefreshListener {
+			binding?.swipeToRefreshLayout?.isRefreshing = false
 
 			// Load data directly from the API, skipping cache
 			viewModel.getFighters(allowCache = false)
@@ -83,42 +117,40 @@ class HomeFragment : Fragment() {
 					// region Fighters
 					HomeViewModel.ViewState.LoadingFighters -> {
 						// Hide the no result image
-						binding.imageViewNoResults.visibility = View.GONE
+						binding?.imageViewNoResults?.visibility = View.GONE
 
 						// Shows the skeleton loading
-						binding.recyclerViewFighters.adapter = SkeletonAdapter(R.layout.item_fighter)
+						binding?.recyclerViewFighters?.adapter = SkeletonAdapter(R.layout.item_fighter)
 					}
 
 					is HomeViewModel.ViewState.FightersLoaded -> {
 						// Update the recycler view
 						fightersAdapter.setItems(state.list)
-						binding.recyclerViewFighters.adapter = fightersAdapter
+						binding?.recyclerViewFighters?.adapter = fightersAdapter
 
 						// Shows the no result image if the list is empty
-						if (state.list.isEmpty()) binding.imageViewNoResults.visibility = View.VISIBLE
+						if (state.list.isEmpty()) binding?.imageViewNoResults?.visibility = View.VISIBLE
 					}
 
 					is HomeViewModel.ViewState.FightersError -> {
 						Log.e("HomeFragment", "Error -> ${state.throwable}")
-						Snackbar.make(binding.root, state.throwable.message ?: getString(R.string.generic_error), Snackbar.LENGTH_SHORT).show()
+						binding?.root?.let { Snackbar.make(it, state.throwable.message ?: getString(R.string.generic_error), Snackbar.LENGTH_SHORT).show() }
 					}
 					// endregion
 
 					// region Universes
 					HomeViewModel.ViewState.LoadingUniverses -> {
-						// Shows the skeleton loading
-						binding.recyclerViewUniversesFilter.adapter = SkeletonAdapter(R.layout.item_universe)
+						binding?.tabLayout?.visibility = View.GONE
 					}
 
 					is HomeViewModel.ViewState.UniversesLoaded -> {
-						// Update the recycler view
-						universesAdapter.setItems(state.list)
-						binding.recyclerViewUniversesFilter.adapter = universesAdapter
+						universes = state.list
+						setupTabLayout()
 					}
 
 					is HomeViewModel.ViewState.UniversesError -> {
 						Log.e("HomeFragment", "Error -> ${state.throwable}")
-						Snackbar.make(binding.root, state.throwable.message ?: getString(R.string.generic_error), Snackbar.LENGTH_SHORT).show()
+						binding?.root?.let { Snackbar.make(it, state.throwable.message ?: getString(R.string.generic_error), Snackbar.LENGTH_SHORT).show() }
 					}
 					// endregion
 
@@ -127,27 +159,12 @@ class HomeFragment : Fragment() {
 		}
 	}
 
-	private fun setupUniversesRecyclerView() {
-		this.binding.recyclerViewUniversesFilter.apply {
-			// Bind the adapter's on item click listener
-			universesAdapter.onItemSelectedListener = this@HomeFragment::onUniverseSelected
-			// Sets the recycler view's adapter
-			adapter = universesAdapter
-		}
-	}
-
 	private fun setupFightersRecyclerView() {
-		this.binding.recyclerViewFighters.apply {
+		this.binding?.recyclerViewFighters?.apply {
 			// Bind the adapter's on item click listener
 			fightersAdapter.onItemSelectedListener = this@HomeFragment::onFighterSelected
 			// Sets the recycler view's adapter
 			adapter = fightersAdapter
-
-			// Embeds a item divider as decorator
-			addItemDecoration(DividerItemDecoration(context, DividerItemDecoration.VERTICAL).apply {
-				// Set the decorator color
-				setDrawable(ColorDrawable(ContextCompat.getColor(requireContext(), R.color.divider_gray)))
-			})
 
 			// When about to draw the recyclerview, start the postponed transition
 			viewTreeObserver.addOnPreDrawListener {
@@ -161,9 +178,9 @@ class HomeFragment : Fragment() {
 		this.navController.navigate(HomeFragmentDirections.actionHomeFragmentToFighterFilterFragment())
 	}
 
-	private fun onUniverseSelected(item: Universe?) {
+	private fun onUniverseSelected(universeName: String? = null) {
 		// Update the filter
-		this.viewModel.filter.universeName = item?.name
+		this.viewModel.filter.universeName = universeName
 		this.viewModel.getFighters()
 	}
 

@@ -14,6 +14,7 @@ internal val coilModule = module {
 				.availableMemoryPercentage(0.25)
 				.crossfade(true)
 				.placeholder(R.drawable.shape_logo)
+				.allowHardware(false)
 				.okHttpClient { // Define the caching system
 					OkHttpClient.Builder().cache(CoilUtils.createDefaultCache(androidContext())).build()
 				}

@@ -4,11 +4,13 @@
     <option name="filePathToZoomLevelMap">
       <map>
         <entry key="..\:/Projects/Android/smashbros-ultimate/app/src/main/res/drawable/shape_logo.xml" value="0.37447916666666664" />
+        <entry key="..\:/Projects/Android/smashbros-ultimate/app/src/main/res/drawable/shape_universe_background.xml" value="0.3770833333333333" />
         <entry key="..\:/Projects/Android/smashbros-ultimate/app/src/main/res/layout/fragment_fighter_detail.xml" value="0.35833333333333334" />
         <entry key="..\:/Projects/Android/smashbros-ultimate/app/src/main/res/layout/fragment_fighter_filter.xml" value="0.33" />
         <entry key="..\:/Projects/Android/smashbros-ultimate/app/src/main/res/layout/fragment_home.xml" value="0.36666666666666664" />
         <entry key="..\:/Projects/Android/smashbros-ultimate/app/src/main/res/layout/fragment_onboarding.xml" value="0.3553846153846154" />
         <entry key="..\:/Projects/Android/smashbros-ultimate/app/src/main/res/layout/item_fighter.xml" value="0.33" />
+        <entry key="..\:/Projects/Android/smashbros-ultimate/app/src/main/res/layout/item_universe.xml" value="0.3553846153846154" />
         <entry key="..\:/Projects/Android/smashbros-ultimate/app/src/main/res/layout/item_universe_default.xml" value="0.36666666666666664" />
       </map>
     </option>

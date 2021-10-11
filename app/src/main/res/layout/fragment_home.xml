@@ -3,13 +3,13 @@
 	xmlns:app="http://schemas.android.com/apk/res-auto"
 	xmlns:tools="http://schemas.android.com/tools"
 	android:layout_width="match_parent"
+	android:background="@color/light_background"
 	android:layout_height="match_parent">
 
 	<com.google.android.material.appbar.AppBarLayout
 		android:id="@+id/appBarLayout"
 		android:layout_width="match_parent"
 		android:layout_height="wrap_content"
-		android:background="@color/white"
 		app:layout_constraintEnd_toEndOf="parent"
 		app:layout_constraintStart_toStartOf="parent"
 		app:layout_constraintTop_toTopOf="parent"
@@ -19,26 +19,46 @@
 			android:id="@+id/toolbar"
 			android:layout_width="match_parent"
 			android:layout_height="?attr/actionBarSize"
-			android:background="?colorPrimary"
 			android:theme="@style/Theme.App.Toolbar"
 			app:menu="@menu/menu_home"
 			app:title="@string/home_toolbar_title"
 			app:titleTextAppearance="@style/Theme.App"
 			app:titleTextColor="@color/white" />
 
-		<androidx.recyclerview.widget.RecyclerView
-			android:id="@+id/recyclerViewUniversesFilter"
+		<View
+			android:layout_width="match_parent"
+			android:layout_height="1dp"
+			android:alpha="0.1"
+			android:background="@color/black" />
+
+		<com.google.android.material.tabs.TabLayout
+			android:id="@+id/tabLayout"
 			android:layout_width="match_parent"
 			android:layout_height="wrap_content"
-			android:clipChildren="false"
-			android:clipToPadding="false"
-			android:orientation="horizontal"
-			android:paddingHorizontal="10dp"
-			app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-			app:layout_constraintEnd_toEndOf="parent"
-			app:layout_constraintStart_toStartOf="parent"
-			app:layout_constraintTop_toBottomOf="@id/appBarLayout"
-			tools:listitem="@layout/item_universe" />
+			android:background="@color/transparent_black"
+			android:visibility="gone"
+			app:tabGravity="center"
+			app:tabIndicatorColor="@color/white"
+			app:tabMode="scrollable"
+			app:tabSelectedTextColor="@color/white"
+			tools:visibility="visible">
+
+			<com.google.android.material.tabs.TabItem
+				android:layout_width="match_parent"
+				android:layout_height="match_parent"
+				tools:text="@tools:sample/lorem" />
+
+			<com.google.android.material.tabs.TabItem
+				android:layout_width="match_parent"
+				android:layout_height="match_parent"
+				tools:text="@tools:sample/lorem" />
+
+			<com.google.android.material.tabs.TabItem
+				android:layout_width="match_parent"
+				android:layout_height="match_parent"
+				tools:text="@tools:sample/lorem" />
+
+		</com.google.android.material.tabs.TabLayout>
 
 	</com.google.android.material.appbar.AppBarLayout>
 
@@ -48,7 +68,7 @@
 		android:layout_height="match_parent"
 		app:layout_behavior="@string/appbar_scrolling_view_behavior"
 		app:layout_constraintBottom_toBottomOf="parent"
-		app:layout_constraintTop_toBottomOf="@id/recyclerViewUniversesFilter">
+		app:layout_constraintTop_toBottomOf="@id/tabLayout">
 
 		<FrameLayout
 			android:layout_width="match_parent"
@@ -58,19 +78,20 @@
 				android:id="@+id/recyclerViewFighters"
 				android:layout_width="match_parent"
 				android:layout_height="match_parent"
-				app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+				app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
+				app:spanCount="2"
 				tools:listitem="@layout/item_fighter" />
 
 			<ImageView
-				android:layout_width="match_parent"
-				tools:visibility="visible"
 				android:id="@+id/imageViewNoResults"
-				tools:alpha="0.5"
-				android:visibility="gone"
+				android:layout_width="match_parent"
 				android:layout_height="match_parent"
 				android:layout_margin="100dp"
 				android:contentDescription="@string/content_description_no_results"
-				android:src="@drawable/ic_empty_list" />
+				android:src="@drawable/ic_empty_list"
+				android:visibility="gone"
+				tools:alpha="0.5"
+				tools:visibility="visible" />
 		</FrameLayout>
 
 	</androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
