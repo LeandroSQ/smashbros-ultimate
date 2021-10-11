@@ -17,6 +17,7 @@
 	<string name="home_toolbar_title">Fighters</string>
 	<string name="home_menu_action_filter">Filter</string>
 	<string name="text_all">All</string>
+	<string name="generic_error">Something went wrong!\nPlease, try again later.</string>
 	<string name="content_description_no_results">No results</string>
 
 	<!-- <editor-fold defaultstate="Collapsed" desc="Fighter" -->

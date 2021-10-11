@@ -9,8 +9,10 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.FragmentNavigatorExtras
 import androidx.navigation.fragment.findNavController
+import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupWithNavController
 import androidx.recyclerview.widget.DividerItemDecoration
+import com.google.android.material.snackbar.Snackbar
 import kotlinx.coroutines.flow.collect
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 import quevedo.soares.leandro.techtest.R
@@ -57,7 +59,7 @@ class HomeFragment : Fragment() {
 	}
 
 	private fun setupToolbar() {
-		this.binding.toolbar.setupWithNavController(this.navController)
+		this.binding.toolbar.setupWithNavController(this.navController, AppBarConfiguration(setOf(R.id.homeFragment, R.id.onBoardingFragment)))
 		this.binding.toolbar.setOnMenuItemClickListener {
 			onFilterButtonClick()
 			true
@@ -98,6 +100,7 @@ class HomeFragment : Fragment() {
 
 					is HomeViewModel.ViewState.FightersError -> {
 						Log.e("HomeFragment", "Error -> ${state.throwable}")
+						Snackbar.make(binding.root, state.throwable.message ?: getString(R.string.generic_error), Snackbar.LENGTH_SHORT).show()
 					}
 					// endregion
 
@@ -115,6 +118,7 @@ class HomeFragment : Fragment() {
 
 					is HomeViewModel.ViewState.UniversesError -> {
 						Log.e("HomeFragment", "Error -> ${state.throwable}")
+						Snackbar.make(binding.root, state.throwable.message ?: getString(R.string.generic_error), Snackbar.LENGTH_SHORT).show()
 					}
 					// endregion
 
