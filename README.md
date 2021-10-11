@@ -19,3 +19,6 @@
 - [x] Jetpack Lifecycle aware
 - [x] Skeleton adapter (Custom made)
 - [x] Rating bar (Custom made)
+- [x] Color palette API
+- [x] Color manipulation (Contrast, Darken and Lighten)
+- [x] CoordinatorLayout
